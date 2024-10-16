@@ -1,74 +1,43 @@
-# Базовая настройка
+# Задание 1: Анализ и проектирование
 
-## Запуск minikube
+## Подзадание 1.1: Анализ и планирование
 
-[Инструкция по установке](https://minikube.sigs.k8s.io/docs/start/)
+### 1.1.1 Функциональность текущего монолитного приложения
 
-```bash
-minikube start
-```
+**Управление отоплением:**
+ * Пользователи могут удалённо включать/выключать отопление в своих домах.
+ * Пользователи могут устанавливать желаемую температуру.
+ * Система автоматически поддерживает заданную температуру, регулируя подачу тепла.
 
+**Мониторинг температуры:**
+ * Система получает данные о температуре с датчиков, установленных в домах.
+ * Пользователи могут просматривать текущую температуру в своих домах через веб-интерфейс.
 
-## Добавление токена авторизации GitHub
+### 1.1.2 Архитектура монолитного приложения
 
-[Получение токена](https://github.com/settings/tokens/new)
+**Язык программирования:** Java
 
-```bash
-kubectl create secret docker-registry ghcr --docker-server=https://ghcr.io --docker-username=<github_username> --docker-password=<github_token> -n default
-```
+**База данных:** PostgreSQL
 
+**Архитектура:** Монолитная, все компоненты системы (обработка запросов, бизнес-логика, работа с данными) находятся в рамках одного приложения.
 
-## Установка API GW kusk
+**Взаимодействие:** Синхронное, запросы обрабатываются последовательно.
 
-[Install Kusk CLI](https://docs.kusk.io/getting-started/install-kusk-cli)
+**Масштабируемость:** Ограничена, так как монолит сложно масштабировать по частям.
 
-```bash
-kusk cluster install
-```
+**Развертывание:** Требует остановки всего приложения.
 
+### 1.1.3 Домены и границы контекстов в системе
 
-## Настройка terraform
+1. **Домен "Управление отоплением"**:
+    * Контекст "Управление отоплением"
+    * Контекст "Управление температурой"
+    * Контекст "Управление пользователями"
 
-[Установите Terraform](https://yandex.cloud/ru/docs/tutorials/infrastructure-management/terraform-quickstart#install-terraform)
+2. **Субдомен "Обслуживание клиентов"**
+3. **Субдомен "Продажи и маркетинг"**
 
+### 1.1.4 Диаграмма взаимодействия монолитного приложения с внешним миром
 
-Создайте файл ~/.terraformrc
+Диаграмма взаимодействия в файле [/diagrams/context/Heating_Monolith_Context.puml](/diagrams/context/Heating_Monolith_Context.puml)
 
-```hcl
-provider_installation {
-  network_mirror {
-    url = "https://terraform-mirror.yandexcloud.net/"
-    include = ["registry.terraform.io/*/*"]
-  }
-  direct {
-    exclude = ["registry.terraform.io/*/*"]
-  }
-}
-```
-
-## Применяем terraform конфигурацию 
-
-```bash
-cd terraform
-terraform apply
-```
-
-## Настройка API GW
-
-```bash
-kusk deploy -i api.yaml
-```
-
-## Проверяем работоспособность
-
-```bash
-kubectl port-forward svc/kusk-gateway-envoy-fleet -n kusk-system 8080:80
-curl localhost:8080/hello
-```
-
-
-## Delete minikube
-
-```bash
-minikube delete
-```
