@@ -6,11 +6,9 @@ LAYOUT_WITH_LEGEND()
 
 Person(user, "Клиент", "Пользователь системы")
 System(system, "Monolith", "Система управления отоплением")
-System_Ext(sensors, "Сенсоры")
-System_Ext(heatingSystem, "Система отопления")
+System_Ext(devices, "Устройства")
 
 Rel(user, system, "Использует")
-Rel(system, sensors, "Получает данные температуры")
-Rel_R(system, heatingSystem, "Управляет")
+Rel_R(system, devices, "Получение температуры, управление")
 
 @enduml

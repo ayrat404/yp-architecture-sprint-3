@@ -1,0 +1,44 @@
+﻿@startuml
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/refs/heads/master/C4_Context.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/refs/heads/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(user, "Клиент", "Пользователь системы")
+Person(admin, "Админ", "Администратор системы")
+
+System_Ext(devicesExt, "Устройства")
+
+System_Boundary(c1, "Система управления умным домом") {
+    Container(ui, "Интерфейс пользователя")
+    Container(uiAdmin, "Интерфейс администратора")
+    Container(apiGateway, "API шлюз")
+
+    Container(users, "Сервис пользователей", "", "Управляет пользователями")
+    Container(devices, "Сервис устройств", "", "Управляет устройствами")
+    Container(telemetry, "Сервис телеметрии", "", "Управляет телеметрией")
+    
+    ContainerDb(usersDb, "Database", "", "Stores data for the application")
+    ContainerDb(devicesDb, "Database", "", "Stores data for the application")
+    ContainerDb(telemetryDb, "Database", "", "Stores data for the application")
+}
+
+Rel(devicesExt, apiGateway, "Передача телеметрии")
+
+Rel(user, ui, "Работает с системой")
+Rel(admin, uiAdmin, "Работает с системой")
+Rel(ui, apiGateway, "")
+Rel(uiAdmin, apiGateway, "")
+
+Rel(apiGateway, users, "Управление пользователями")
+Rel(apiGateway, devices, "Управление устройствами")
+Rel(apiGateway, telemetry, "Работа с телеметрией")
+
+Rel_L(devices, telemetry, "Получение телеметрии устройств")
+
+Rel(users, usersDb, "")
+Rel(devices, devicesDb, "")
+Rel(telemetry, telemetryDb, "")
+
+@enduml

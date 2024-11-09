@@ -1,0 +1,135 @@
+openapi: 3.0.0
+info:
+  title: Управление устройствами
+  version: 1.0.0
+paths:
+  /devices/{device_id}:
+    get:
+      summary: Получение информации об устройстве
+      parameters:
+        - name: device_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Успех
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  type_id:
+                    type: string
+                  house_id:
+                    type: string
+                  serial_number:
+                    type: string
+                  status:
+                    type: integer
+              examples:
+                Пример 1:
+                  value:
+                    id: "123e4567-e89b-12d3-a456-426614174000"
+                    type_id: "123e4567-e89b-12d3-a456-426614174001"
+                    house_id: "123e4567-e89b-12d3-a456-426614174002"
+                    serial_number: "SN123456789"
+                    status: 1
+        '404':
+          description: Устройство не найдено
+        '500':
+          description: Внутренняя ошибка сервера
+  /devices/{device_id}/status:
+    put:
+      summary: Обновление состояния устройства
+      parameters:
+        - name: device_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: integer
+            examples:
+              Выключение устройства:
+                value:
+                  status: 0
+              Включение устройства:
+                value:
+                  status: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Успешное обновление состояния:
+                  value:
+                    message: "Device status updated successfully"
+        '400':
+          description: Неверные входные данные
+        '404':
+          description: Устройство не найдено
+        '500':
+          description: Ошибка сервера
+  /devices/{device_id}/commands:
+    post:
+      summary: Отправка команды устройству
+      parameters:
+        - name: device_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                command:
+                  type: string
+                parameters:
+                  type: object
+            examples:
+              Установка температуры:
+                value:
+                  command: "set_temperature"
+                  parameters:
+                    value: 22
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              examples:
+                Успешный ответ:
+                  value:
+                    message: "Command sent successfully"
+        '400':
+          description: Неверные входные данные
+        '404':
+          description: Устройство не найдено
+        '500':
+          description: Ошибка сервера
