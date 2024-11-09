@@ -1,0 +1,24 @@
+﻿@startuml
+
+'!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/refs/heads/master/C4_Context.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/refs/heads/master/C4_Container.puml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/refs/heads/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+ContainerDb(db, "Database", "", "Хранит данные устройств")
+
+Container_Boundary(c1, "Сервис устройств"){
+    Component(api, "API Controller", "", "Обслуживает входящие запросы")
+    Component(commandHandler, "Обработчик команд", "", "Обрабатывает команды от пользователя")
+    Component(stateManager, "Менеджер состояния устройств", "", "Управляет состоянием устройств")
+    Component(dal, "Уровень работы с БД", "", "Работает с БД")
+}
+
+Rel(api, commandHandler, "Вызывает обработчик команд")
+Rel_L(commandHandler, stateManager, "")
+Rel(commandHandler, dal, "")
+
+Rel(dal, db, "Сохраняет данные")
+
+@enduml

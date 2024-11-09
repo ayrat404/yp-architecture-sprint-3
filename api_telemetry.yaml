@@ -1,0 +1,106 @@
+openapi: 3.0.0
+info:
+  title: Телеметрия
+  version: 1.0.0
+paths:
+  /telemetry/{device_id}/latest:
+    get:
+      summary: Получение последних данных телеметрии
+      parameters:
+        - name: device_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  device_id:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+                  data:
+                    type: object
+                    properties: 
+                        temperature:
+                            type: integer
+              examples:
+                Пример данных телеметрии:
+                  value:
+                    id: "123e4567-e89b-12d3-a456-426614174003"
+                    device_id: "123e4567-e89b-12d3-a456-426614174000"
+                    timestamp: "2023-10-01T12:00:00Z"
+                    data: 
+                        temperature: 22
+        '404':
+          description: Устройство не найдено
+        '500':
+          description: Внутренняя ошибка сервера
+  /telemetry/{device_id}/history:
+    get:
+      summary: Получение исторических данных телеметрии
+      parameters:
+        - name: device_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: start_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: end_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    device_id:
+                      type: string
+                    timestamp:
+                      type: string
+                      format: date-time
+                    data:
+                      type: object
+                      properties: 
+                        temperature:
+                          type: integer
+              examples:
+                Пример данных телеметрии:
+                  value:
+                    - id: "123e4567-e89b-12d3-a456-426614174003"
+                      device_id: "123e4567-e89b-12d3-a456-426614174000"
+                      timestamp: "2023-09-01T12:00:00Z"
+                      data: 
+                        temperature: 22
+                    - id: "123e4567-e89b-12d3-a456-426614174004"
+                      device_id: "123e4567-e89b-12d3-a456-426614174000"
+                      timestamp: "2023-09-02T12:00:00Z"
+                      data: 
+                        temperature: 23
+        '404':
+          description: Устройство не найдено
+        '500':
+          description: Внутренняя ошибка сервера

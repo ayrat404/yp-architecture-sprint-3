@@ -1,0 +1,14 @@
+﻿@startuml
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/refs/heads/master/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(user, "Клиент", "Пользователь системы")
+System(system, "Monolith", "Система управления отоплением")
+System_Ext(devices, "Устройства")
+
+Rel(user, system, "Использует")
+Rel_R(system, devices, "Получение температуры, управление")
+
+@enduml
