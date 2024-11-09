@@ -62,10 +62,10 @@
 
 #### Диаграмма уровня контейнеров
 
-Файл: [/diagrams/context/Smart_Home_Container.puml](/diagrams/context/Smart_Home_Container.puml)
+Файл: [/diagrams/container/Smart_Home_Container.puml](/diagrams/container/Smart_Home_Container.puml)
 
 #### Диаграмма уровня компонентов
-Файл: [/diagrams/context/Smart_Home_Devices_Component.puml](/diagrams/context/Smart_Home_Devices_Component.puml)
+Файл: [/diagrams/component/Smart_Home_Devices_Component.puml](/diagrams/component/Smart_Home_Devices_Component.puml)
 
 ## Подзадание 1.3: ER-диаграмма
 
